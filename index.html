@@ -122,6 +122,17 @@
       transition: color 0.15s;
     }
     nav.site-nav a:hover { color: var(--text); }
+    nav.site-nav a.nav-github {
+      color: var(--text);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+    }
+    nav.site-nav a.nav-github:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--surface2);
+    }
 
     /* Hero */
     .hero {
@@ -428,6 +439,7 @@
         <a href="#projects">四大工程</a>
         <a href="#quickstart">快速开始</a>
         <a href="#docs">文档地图</a>
+        <a class="nav-github" href="https://github.com/guorenhuang/casetest" target="_blank" rel="noopener noreferrer">GitHub</a>
       </nav>
     </header>
 
@@ -440,6 +452,7 @@
       <div class="cta-row">
         <a class="btn btn-primary" href="exam-paper.md">阅读完整题面</a>
         <a class="btn btn-ghost" href="exam-wangxing/README.md">进入提交目录 README</a>
+        <a class="btn btn-ghost" href="https://github.com/guorenhuang/casetest" target="_blank" rel="noopener noreferrer">GitHub 源码</a>
       </div>
       <div class="hero-stats" role="list">
         <div class="stat" role="listitem">
@@ -552,7 +565,7 @@
     <section class="block" id="docs">
       <h2>文档地图</h2>
       <p class="section-desc">
-        阅卷与自查时建议按：题面 → 各题 README 自检表 → Transcript 索引 → Reflection。静态服务器上 <code>.md</code> 多为下载或源码查看，也可用 Git 托管的预览或本地编辑器打开。
+        阅卷与自查时建议按：题面 → 各题 README 自检表 → Transcript 索引 → Reflection。静态服务器上 <code>.md</code> 多为下载或源码查看，推荐在 <a href="https://github.com/guorenhuang/casetest" target="_blank" rel="noopener noreferrer" style="color:var(--cyan)">GitHub 仓库</a> 浏览渲染后的 Markdown。
       </p>
       <div class="table-wrap">
         <table class="doc-table">
@@ -560,6 +573,7 @@
             <tr><th>资源</th><th>路径</th></tr>
           </thead>
           <tbody>
+            <tr><td>GitHub 公开仓库</td><td><a href="https://github.com/guorenhuang/casetest" target="_blank" rel="noopener noreferrer">github.com/guorenhuang/casetest</a></td></tr>
             <tr><td>仓库快速开始 · QUICK START</td><td><a href="README.md">README.md</a></td></tr>
             <tr><td>原始试卷全文</td><td><a href="exam-paper.md">exam-paper.md</a></td></tr>
             <tr><td>提交目录总览与硬门槛自检</td><td><a href="exam-wangxing/README.md">exam-wangxing/README.md</a></td></tr>
@@ -573,7 +587,7 @@
     </section>
 
     <footer class="site-footer">
-      <span>静态部署：将本仓库作为网站根目录，默认文档设为 <code>index.html</code> 即可展示本页。</span>
+      <span>静态部署：将本仓库作为网站根目录，默认文档设为 <code>index.html</code> 即可展示本页。源码：<a href="https://github.com/guorenhuang/casetest" target="_blank" rel="noopener noreferrer">github.com/guorenhuang/casetest</a></span>
       <a href="#top">回到顶部</a>
     </footer>
   </div>

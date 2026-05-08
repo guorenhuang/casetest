@@ -1,5 +1,7 @@
 # QUICK START · casetest
 
+**GitHub**：https://github.com/guorenhuang/casetest
+
 部署为静态站时，默认打开根目录 **[`index.html`](index.html)** 即可浏览官网式总览（题面精要、四题工程、文档地图与 Docker 端口表）。
 
 本仓库为笔试工程：**题面**在根目录 [`exam-paper.md`](exam-paper.md)，**可提交代码与四题说明**在 **[`exam-wangxing/`](exam-wangxing/README.md)**。
@@ -39,6 +41,7 @@ docker compose up --build
 
 | 文件 | 说明 |
 |------|------|
+| [GitHub 仓库](https://github.com/guorenhuang/casetest) | 公开源码与提交物 |
 | [`index.html`](index.html) | 静态部署首页：题面介绍、四题平台、文档入口 |
 | [`exam-wangxing/README.md`](exam-wangxing/README.md) | 提交目录总览、自检、Compose 说明 |
 | [`exam-wangxing/reflection.md`](exam-wangxing/reflection.md) | 试卷 Reflection（≤600 字） |
