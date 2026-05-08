@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 平台工程师笔试 · 工程与题面总览</title>
+  <meta name="description" content="Take-home 笔试工程总入口：题面 exam-paper、四题可运行实现、文档与 Docker 一键启动说明。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg0: #030306;
+      --bg1: #0a0a12;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface2: rgba(255, 255, 255, 0.07);
+      --stroke: rgba(255, 255, 255, 0.1);
+      --text: #f4f4f8;
+      --muted: #9898a8;
+      --cyan: #2dd4bf;
+      --violet: #a78bfa;
+      --rose: #fb7185;
+      --amber: #fbbf24;
+      --font-display: "Syne", system-ui, sans-serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+      --radius: 18px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg0);
+      overflow-x: hidden;
+    }
+
+    .noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: 0.035;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .aurora {
+      position: fixed;
+      inset: -20% -10%;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 50% 40% at 20% 20%, rgba(45, 212, 191, 0.22), transparent 55%),
+        radial-gradient(ellipse 45% 35% at 85% 15%, rgba(167, 139, 250, 0.2), transparent 50%),
+        radial-gradient(ellipse 40% 50% at 70% 75%, rgba(251, 113, 133, 0.12), transparent 55%),
+        radial-gradient(ellipse 35% 35% at 10% 80%, rgba(251, 191, 36, 0.08), transparent 50%);
+      filter: blur(40px);
+      animation: drift 28s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(2%, -2%) scale(1.05); opacity: 0.95; }
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black, transparent);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.35rem 5rem;
+    }
+
+    /* Nav */
+    header.site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 0 0;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      box-shadow: 0 0 18px rgba(45, 212, 191, 0.55);
+    }
+    nav.site-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.1rem;
+    }
+    nav.site-nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    nav.site-nav a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      padding: 3.2rem 0 3.5rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .eyebrow span {
+      width: 28px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--stroke), transparent);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2.1rem, 5vw, 3.35rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin: 0 0 1.1rem;
+      max-width: 16ch;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(110deg, var(--cyan), var(--violet) 45%, var(--rose) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-lead {
+      font-size: 1.12rem;
+      color: var(--muted);
+      max-width: 36rem;
+      margin: 0 0 1.75rem;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.78rem 1.35rem;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: linear-gradient(120deg, var(--cyan), #5eead4 40%, var(--violet));
+      color: #030306;
+      box-shadow: 0 8px 32px rgba(45, 212, 191, 0.28);
+    }
+    .btn-primary:hover { box-shadow: 0 12px 40px rgba(167, 139, 250, 0.35); }
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--stroke);
+    }
+    .btn-ghost:hover { background: var(--surface2); }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 2.75rem;
+      max-width: 520px;
+    }
+    @media (max-width: 520px) {
+      .hero-stats { grid-template-columns: 1fr; }
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+    }
+    .stat strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .stat span { font-size: 0.82rem; color: var(--muted); }
+
+    /* Section */
+    section.block {
+      margin-bottom: 4rem;
+    }
+    section.block h2 {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.4rem;
+    }
+    .section-desc {
+      color: var(--muted);
+      max-width: 42rem;
+      margin: 0 0 1.5rem;
+      font-size: 1rem;
+    }
+
+    .paper-card {
+      background: linear-gradient(145deg, var(--surface), rgba(255,255,255,0.02));
+      border: 1px solid var(--stroke);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 1.65rem 1.85rem;
+      box-shadow: var(--shadow);
+    }
+    .paper-card h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .paper-card ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: var(--muted);
+    }
+    .paper-card ul li { margin-bottom: 0.45rem; }
+    .paper-card ul strong { color: var(--text); }
+    .paper-quote {
+      margin-top: 1.25rem;
+      padding: 1rem 1.15rem;
+      border-left: 3px solid var(--violet);
+      background: rgba(167, 139, 250, 0.08);
+      border-radius: 0 12px 12px 0;
+      font-style: italic;
+      color: #d4d4de;
+      font-size: 0.98rem;
+    }
+
+    /* Project cards */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.1rem;
+    }
+    @media (max-width: 768px) {
+      .project-grid { grid-template-columns: 1fr; }
+    }
+    .project-card {
+      position: relative;
+      border-radius: var(--radius);
+      padding: 1.35rem 1.45rem;
+      background: var(--surface);
+      border: 1px solid var(--stroke);
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .project-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      opacity: 0.95;
+    }
+    .project-card.q1::before { background: linear-gradient(90deg, var(--cyan), #5eead4); }
+    .project-card.q2::before { background: linear-gradient(90deg, var(--violet), #c4b5fd); }
+    .project-card.q3::before { background: linear-gradient(90deg, var(--rose), #fda4af); }
+    .project-card.q4::before { background: linear-gradient(90deg, var(--amber), #fcd34d); }
+    .project-card:hover {
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+    .project-card .score {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .project-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin: 0 0 0.45rem;
+      font-weight: 800;
+    }
+    .project-card p {
+      margin: 0 0 1rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .project-links a {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+    .project-links a:hover { border-bottom-color: var(--cyan); }
+    .port {
+      font-family: ui-monospace, monospace;
+      font-size: 0.72rem;
+      color: var(--amber);
+      margin-top: 0.65rem;
+      opacity: 0.95;
+    }
+
+    /* Code / Docker */
+    .code-block {
+      background: #0e0e14;
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      font-family: ui-monospace, "DM Sans", monospace;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      color: #c4c4d0;
+    }
+    .code-block .c { color: var(--muted); }
+    .code-block .k { color: var(--cyan); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+    }
+    table.doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.doc-table th,
+    table.doc-table td {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--stroke);
+    }
+    table.doc-table th {
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 600;
+    }
+    table.doc-table tr:last-child td { border-bottom: none; }
+    table.doc-table a {
+      color: var(--cyan);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    table.doc-table a:hover { text-decoration: underline; }
+
+    footer.site-footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--stroke);
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer.site-footer a { color: var(--violet); }
+
+    a:focus-visible,
+    .btn:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand" id="top">
+        <span class="brand-dot" aria-hidden="true"></span>
+        casetest · 笔试工程总览
+      </div>
+      <nav class="site-nav" aria-label="页面导航">
+        <a href="#paper">题面要点</a>
+        <a href="#projects">四大工程</a>
+        <a href="#quickstart">快速开始</a>
+        <a href="#docs">文档地图</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow"><span aria-hidden="true"></span> Take-home · AI 协同交付</p>
+      <h1>用工程说话，<br /><span class="grad">让协同可验证</span></h1>
+      <p class="hero-lead">
+        本页是部署到静态服务器时的<strong>官方风格总入口</strong>：涵盖原始题面 <code>exam-paper.md</code> 精要、四道真题对应的<strong>可运行工程</strong>说明，以及 Reflection、Transcript、资料库等文档动线。设计与阅卷标准一致——<strong>过程与结果同样重要</strong>。
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="exam-paper.md">阅读完整题面</a>
+        <a class="btn btn-ghost" href="exam-wangxing/README.md">进入提交目录 README</a>
+      </div>
+      <div class="hero-stats" role="list">
+        <div class="stat" role="listitem">
+          <strong>100</strong>
+          <span>总分 · 四题闭环</span>
+        </div>
+        <div class="stat" role="listitem">
+          <strong>30</strong>
+          <span>AI 协同质量权重</span>
+        </div>
+        <div class="stat" role="listitem">
+          <strong>4</strong>
+          <span>工程 · Docker 一并起</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="paper">
+      <h2>题面：<code>exam-paper.md</code></h2>
+      <p class="section-desc">
+        《AI 平台 — 工程师笔试》面向 Take-home：考察从业务问题到可交付产出的推进能力、识别并纠正 AI 产出偏差的能力，以及<strong>可复盘的协同过程</strong>（transcript）。技术栈与模型不限；<strong>强烈推荐 Claude / Claude Code</strong>，与团队日常一致。
+      </p>
+      <div class="paper-card">
+        <h3>提交硬门槛（任一缺失按 0 分处理）</h3>
+        <ul>
+          <li><strong>最终代码 / 产出物</strong>：可运行仓库 + 必要 README。</li>
+          <li><strong>完整 AI 对话记录</strong>：覆盖全部 4 题，<strong>不允许编辑美化</strong>。</li>
+          <li><strong>Reflection ≤600 字</strong>：最帮到 / 弯路最多 / 如何拉回与若重做的问法。</li>
+        </ul>
+        <p class="paper-quote">
+          「评分：过程 = 结果。」—— 满分但 transcript 稀烂的代码，可能低于半成品但协同过程扎实的提交。
+        </p>
+      </div>
+    </section>
+
+    <section class="block" id="projects">
+      <h2>四大工程平台</h2>
+      <p class="section-desc">
+        实现与说明位于 <strong><code>exam-wangxing/</code></strong>，目录对齐试卷约定的 <code>exam-{姓名}/</code> 树形。下列卡片链接到各题 README；本地用 Docker 启动后，可按端口进入控制台或前端。
+      </p>
+      <div class="project-grid">
+        <article class="project-card q1">
+          <p class="score">Q1 · 30 分 · 建议 ~80 分钟</p>
+          <h3>短剧会员订阅后台</h3>
+          <p>多渠道支付回调（Stripe / Apple IAP mock）、显式状态机、幂等与签名校验、三表建模与异常路径测试。</p>
+          <div class="project-links">
+            <a href="exam-wangxing/q1-shortdrama-backend/README.md">README</a>
+            <a href="exam-libraries/q1-shortdrama-backend/prototype.html">资料库原型</a>
+          </div>
+          <p class="port">Docker 本地端口 · 8001（短剧后端 + 控制台）</p>
+        </article>
+        <article class="project-card q2">
+          <p class="score">Q2 · 25 分 · 建议 ~60 分钟</p>
+          <h3>评论审核 Agent</h3>
+          <p>规则外置、模型降级、命中证据链；敏感词 / 正则 / 拼音绕词 / 数字 / OCR 接入点；数据集与跑批报告。</p>
+          <div class="project-links">
+            <a href="exam-wangxing/q2-content-audit-agent/README.md">README</a>
+            <a href="exam-libraries/q2-content-audit-agent/prototype.html">资料库原型</a>
+          </div>
+          <p class="port">Docker 本地端口 · 8080</p>
+        </article>
+        <article class="project-card q3">
+          <p class="score">Q3 · 25 分 · 建议 ~60 分钟</p>
+          <h3>Prompt 救火 · 分镜 Agent</h3>
+          <p>先观测再诊断：问题清单带证据、修复与 Issue 一一映射、before/after 对比；防「AI 敷衍式」诊断。</p>
+          <div class="project-links">
+            <a href="exam-wangxing/q3-prompt-rescue/README.md">README</a>
+            <a href="exam-libraries/q3-prompt-rescue/prototype.html">资料库原型</a>
+          </div>
+          <p class="port">Docker 本地端口 · 8765（工作台）</p>
+        </article>
+        <article class="project-card q4">
+          <p class="score">Q4 · 20 分 · 建议 ~40 分钟</p>
+          <h3>Vibe Coding 小工具</h3>
+          <p>三选一：标题批量改写、分镜→英文美术 prompt、投放合规预检；业务代码须 AI 生成，附带带时间戳 transcript 与转折点记录。</p>
+          <div class="project-links">
+            <a href="exam-wangxing/q4-vibe-coding/README.md">README</a>
+            <a href="exam-libraries/q4-vibe-coding/prototype.html">资料库原型</a>
+          </div>
+          <p class="port">Docker 本地端口 · 8004</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="quickstart">
+      <h2>一键启动（Docker）</h2>
+      <p class="section-desc">
+        在仓库根目录进入 <code>exam-wangxing</code> 后执行 compose；可选配置 <code>OPENAI_API_KEY</code> 供 Q2 / Q3 / Q4 调用模型。详见根目录 <a href="README.md" style="color:var(--cyan)">README.md</a>。
+      </p>
+      <div class="code-block" role="region" aria-label="Docker 命令">
+        <span class="c"># 四题同启</span><br />
+        <span class="k">cd</span> exam-wangxing<br />
+        docker compose up --build
+      </div>
+      <div style="margin-top:1.25rem" class="table-wrap">
+        <table class="doc-table" aria-label="服务与端口">
+          <thead>
+            <tr><th>服务</th><th>本地地址（Compose 默认）</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Q1 短剧后端 + 控制台</td><td>http://127.0.0.1:8001</td></tr>
+            <tr><td>Q2 评论审核</td><td>http://127.0.0.1:8080</td></tr>
+            <tr><td>Q3 Prompt 救火工作台</td><td>http://127.0.0.1:8765</td></tr>
+            <tr><td>Q4 分镜 → 英文 Prompt</td><td>http://127.0.0.1:8004</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block" id="docs">
+      <h2>文档地图</h2>
+      <p class="section-desc">
+        阅卷与自查时建议按：题面 → 各题 README 自检表 → Transcript 索引 → Reflection。静态服务器上 <code>.md</code> 多为下载或源码查看，也可用 Git 托管的预览或本地编辑器打开。
+      </p>
+      <div class="table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>资源</th><th>路径</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>仓库快速开始 · QUICK START</td><td><a href="README.md">README.md</a></td></tr>
+            <tr><td>原始试卷全文</td><td><a href="exam-paper.md">exam-paper.md</a></td></tr>
+            <tr><td>提交目录总览与硬门槛自检</td><td><a href="exam-wangxing/README.md">exam-wangxing/README.md</a></td></tr>
+            <tr><td>≤600 字 Reflection</td><td><a href="exam-wangxing/reflection.md">exam-wangxing/reflection.md</a></td></tr>
+            <tr><td>全卷 transcript 索引</td><td><a href="exam-wangxing/TRANSCRIPT.md">exam-wangxing/TRANSCRIPT.md</a></td></tr>
+            <tr><td>会话 HTML 归档</td><td><a href="chat.html">chat.html</a></td></tr>
+            <tr><td>题面衍生资料库（设计 / 需求 / 原型）</td><td><a href="exam-libraries/index.html">exam-libraries/index.html</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>静态部署：将本仓库作为网站根目录，默认文档设为 <code>index.html</code> 即可展示本页。</span>
+      <a href="#top">回到顶部</a>
+    </footer>
+  </div>
+</body>
+</html>
