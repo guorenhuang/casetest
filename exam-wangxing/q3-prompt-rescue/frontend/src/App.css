@@ -1,0 +1,48 @@
+.app-layout {
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  height: auto;
+  padding: 12px 20px;
+  line-height: 1.4;
+  border-bottom: 1px solid #303030;
+}
+
+.brand {
+  font-weight: 650;
+  font-size: 16px;
+}
+
+.app-content {
+  padding: 16px 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.flow-alert {
+  margin-bottom: 16px;
+}
+
+.prompt-block,
+.raw-out {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #0b1220;
+  border: 1px solid #303030;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 420px;
+  overflow: auto;
+}
+
+.prompt-block {
+  max-height: 280px;
+}

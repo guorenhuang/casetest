@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Q3 原型 · Prompt 诊断工作台</title>
+  <style>
+    :root { --bg:#111827; --card:#1f2937; --line:#374151; --accent:#a78bfa; --text:#f9fafb; --muted:#9ca3af; --bad:#f87171; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+    header { padding: .9rem 1.25rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; }
+    h1 { font-size: 1rem; margin: 0; font-weight: 700; }
+    header a { color: var(--accent); text-decoration: none; font-size: 0.8rem; margin-left: .75rem; }
+    .layout { display: grid; grid-template-columns: 1fr 340px; gap: 1rem; padding: 1rem; max-width: 1200px; margin: 0 auto; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; }
+    .panel h2 { margin: 0 0 .6rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+    pre { margin: 0; padding: .75rem; background: #0b1220; border-radius: 8px; font-size: 0.75rem; overflow: auto; max-height: 220px; color: #d1d5db; border: 1px solid var(--line); }
+    .checks { list-style: none; padding: 0; margin: 0; }
+    .checks li { padding: .45rem 0; border-bottom: 1px solid var(--line); display: flex; gap: .5rem; align-items: flex-start; font-size: 0.85rem; }
+    .checks li:last-child { border-bottom: none; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: .35rem; flex-shrink: 0; }
+    .dot.warn { background: var(--bad); }
+    .dot.ok { background: #34d399; }
+    .muted { color: var(--muted); font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>分镜 Prompt · 诊断工作台（原型）</h1>
+    <div>
+      <a href="../00-overview/prototype.html">总览</a>
+      <a href="system-design.md" target="_blank">system-design</a>
+      <a href="requirements.md" target="_blank">requirements</a>
+    </div>
+  </header>
+  <div class="layout">
+    <section class="panel">
+      <h2>待诊断 Prompt（试卷原样）</h2>
+      <pre>你是一个资深的短剧分镜师，请根据用户给的剧情，生成详细的分镜表。
+请尽可能详细，越详细越好，把你能想到的都写出来。
+输出 JSON 格式，字段你自己设计。
+注意要符合年轻人喜欢的风格，有爆点。
+如果剧情不合适，就自己改一下让它更适合短剧。
+剧情：{plot}</pre>
+    </section>
+    <aside class="panel">
+      <h2>检查单（示意 · 以 observations 为准）</h2>
+      <ul class="checks">
+        <li><span class="dot warn"></span><span>输出长度是否失控（证据行号）</span></li>
+        <li><span class="dot warn"></span><span>JSON 是否可解析（证据）</span></li>
+        <li><span class="dot warn"></span><span>风格是否漂移（同 plot 多次对比）</span></li>
+        <li><span class="dot warn"></span><span>是否篡改用户设定（diff 剧情要素）</span></li>
+        <li><span class="dot ok"></span><span>≥4 条问题写入 issues.md</span></li>
+      </ul>
+      <p class="muted" style="margin:1rem 0 0">真实交付为 markdown：observations → issues → fixed_prompt（映射表）→ before_after。</p>
+    </aside>
+  </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+# Q3 Prompt 救火工作台
+# 在本目录：docker compose up --build -d → http://127.0.0.1:8765
+# Markdown 导出写入当前目录（挂载为 /publish）；SQLite 在命名卷 /data
+# 可选：docker compose --env-file .env up -d （OPENAI_*）
+
+services:
+  q3-prompt-rescue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: exam-wangxing-q3:local
+    container_name: exam-wangxing-q3-workbench
+    ports:
+      - "8765:8765"
+    environment:
+      Q3_SQLITE_PATH: /data/q3_workbench.db
+      Q3_EXPORT_DIR: /publish
+      CORS_ORIGINS: "*"
+    volumes:
+      - q3_wb_data:/data
+      - .:/publish
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/api/meta', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  q3_wb_data:

@@ -1,0 +1,69 @@
+# 在本目录：`docker compose up --build`
+# （提交 zip 后解压至此目录即可同源编排 Q1+Q2+Q3+Q4）
+
+services:
+  q1-shortdrama-backend:
+    build:
+      context: ./q1-shortdrama-backend
+    image: exam-wangxing-q1:local
+    ports:
+      - "8001:8000"
+    environment:
+      DATABASE_PATH: /data/app.db
+      STATIC_DIR: /app/static
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_local_default_secret}
+      APPLE_SHARED_SECRET: ${APPLE_SHARED_SECRET:-apple_shared_mock_secret}
+      STRIPE_SIGNATURE_TOLERANCE_SECONDS: "300"
+    volumes:
+      - q1_data:/data
+
+  q3-prompt-rescue:
+    build:
+      context: ./q3-prompt-rescue
+      dockerfile: Dockerfile
+    image: exam-wangxing-q3:local
+    ports:
+      - "8765:8765"
+    environment:
+      Q3_SQLITE_PATH: /data/q3_workbench.db
+      Q3_EXPORT_DIR: /publish
+      CORS_ORIGINS: "*"
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+    volumes:
+      - q3_wb_data:/data
+      - ./q3-prompt-rescue:/publish
+
+  q2-content-audit-agent:
+    build:
+      context: ./q2-content-audit-agent
+    image: exam-wangxing-q2:local
+    ports:
+      - "8080:8000"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+    volumes:
+      - q2_audit_data:/app/data
+
+  q4-vibe-coding:
+    build:
+      context: ./q4-vibe-coding/code
+    image: exam-wangxing-q4:local
+    ports:
+      - "8004:8000"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      STORYBOARD_DB_PATH: /app/data/storyboard.db
+      STATIC_DIR: /app/static
+    volumes:
+      - q4_data:/app/data
+
+volumes:
+  q1_data:
+  q3_wb_data:
+  q2_audit_data:
+  q4_data:

@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "purpose": "Q2 audit batch · ≥30 with ≥5 tricky cases (see id c27–c34)",
+    "image_host_note": "图床 OCR 演示：域名或 ?ocr=/&text=/&mock="
+  },
+  "comments": [
+    {"id": "c01", "text": "男主演技在线，这波反转可以。", "expect": "pass"},
+    {"id": "c02", "text": "女二造型好美，配乐也舒服。", "expect": "pass"},
+    {"id": "c03", "text": "第三集那句台词笑死我了😂纯娱乐别杠。", "expect": "pass"},
+    {"id": "c04", "text": "节奏有点慢但是还能追，坐等更新。", "expect": "pass"},
+    {"id": "c05", "text": "这剧三观挺正的，Families 爱看。", "expect": "pass"},
+    {"id": "c06", "text": "剧情有点牵强不过当个下饭剧还行。", "expect": "pass"},
+    {"id": "c07", "text": "有没有人记得第二集彩蛋细节？", "expect": "pass"},
+    {"id": "c08", "text": "结局有点仓促，但整体值回票价。", "expect": "pass"},
+    {"id": "c09", "text": "镜头语言不错，导演的构图有味道。", "expect": "pass"},
+    {"id": "c10", "text": "求别剧透😭我还在补前三集。", "expect": "pass"},
+    {"id": "c11", "text": "这演员以前演过另一部短剧也好看。", "expect": "pass"},
+    {"id": "c12", "text": "反派塑造比主角还立体，有点意思。", "expect": "pass"},
+    {"id": "c13", "text": "评论区氛围还行，别吵了大家和平讨论。", "expect": "pass"},
+    {"id": "c14", "text": "更新太慢了，制作方加油啊。", "expect": "pass"},
+    {"id": "c15", "text": "这集母题其实讲的是信任，细品还行。", "expect": "pass"},
+    {"id": "c16", "text": "有没有类似题材推荐？想一口气刷完。", "expect": "pass"},
+    {"id": "c17", "text": "你这发言像傻逼一样，滚远点。", "expect": "block"},
+    {"id": "c18", "text": "你这智商真是尼玛离谱。", "expect": "block"},
+    {"id": "c19", "text": "加微信拉群，免费送全集资源百度云。", "expect": "block"},
+    {"id": "c20", "text": "jia v ❤️ 戳我主页看惊喜", "expect": "block"},
+    {"id": "c21", "text": "wei xin 号发你了，加我领福利", "expect": "review"},
+    {"id": "c22", "text": "资源在这👇戳链接 https://t.cn/FAKE123", "expect": "review"},
+    {"id": "c23", "text": "我 QQ 号是 9574321801 私聊我拿", "expect": "review"},
+    {"id": "c24", "text": "这集挺好看的推荐大家看看（无导流）。", "expect": "pass"},
+    {"id": "c25", "text": "戳我免费送，磁力链接走起", "expect": "review"},
+    {"id": "c26", "text": "纯讨论：伏笔是不是在茶杯那一场？", "expect": "pass"},
+    {"id": "c27", "text": "加V➕：18一23一55一99，懂的来", "expect": "block", "note_tricky": "emoji+V+分段数字"},
+    {"id": "c28", "text": "jia  wei      xin  me 可以吗", "expect": "block", "note_tricky": "拼音打散+空格"},
+    {"id": "c29", "text": "jvx加我别犹豫", "expect": "review", "note_tricky": "首字母"},
+    {"id": "c30", "text": "V📱💬戳我进群领红包888", "expect": "block", "note_tricky": "emoji+V+引流词+「进群领」词表"},
+    {"id": "c31", "text": "私信我主页有惊喜（只是玩梗不构成真实导流语义）但仍易触发软广规则。", "expect": "review"},
+    {"id": "c32", "text": "", "expect": "review", "image_urls": ["https://cdn.quiz.test/img/ad.png?ocr=限量领取+进群+V123456789"], "note_tricky": "图床 OCR mock"},
+    {"id": "c33", "text": "正常影评配图", "expect": "review", "image_urls": ["https://img.example.com/frame.jpg"], "note_tricky": "图床域名触发 review + OCR heuristic"},
+    {"id": "c34", "text": "1️⃣8️⃣8️⃣-0000-neinei 加我", "expect": "review", "note_tricky": "emoji拆分数字仍可被分段/正则"}
+  ]
+}

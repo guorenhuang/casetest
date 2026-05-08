@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Q4 原型 · Vibe 选题启动页</title>
+  <style>
+    :root { --bg:linear-gradient(145deg,#0f172a 0%,#1e1b4b 50%,#312e81 100%); --card:rgba(255,255,255,.06); --text:#f8fafc; --muted:#94a3b8; --hi:#fbbf24; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: "SF Pro Text", ui-sans-serif, system-ui, sans-serif; font-size: 15px; }
+    .shell { max-width: 800px; margin: 0 auto; padding: 2.5rem 1.25rem 3rem; }
+    h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; margin: 0 0 .35rem; }
+    p.lead { color: var(--muted); margin: 0 0 1.75rem; line-height: 1.5; }
+    .opts { display: flex; flex-direction: column; gap: .85rem; }
+    .opt {
+      display: block; padding: 1rem 1.15rem; border-radius: 14px; background: var(--card);
+      border: 1px solid rgba(255,255,255,.12); text-decoration: none; color: inherit;
+      transition: transform .12s, border-color .12s;
+    }
+    .opt:hover { transform: scale(1.01); border-color: var(--hi); }
+    .opt strong { color: var(--hi); font-size: 0.78rem; letter-spacing: .07em; }
+    .opt h2 { margin: .35rem 0 .2rem; font-size: 1.05rem; font-weight: 700; }
+    .opt span { color: var(--muted); font-size: 0.88rem; line-height: 1.45; }
+    footer { margin-top: 2rem; font-size: 0.82rem; color: var(--muted); }
+    footer a { color: #a5b4fc; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <h1>Vibe Coding · 选题原型</h1>
+    <p class="lead">30 分钟内可运行 demo；真实实现放在 <code>code/</code>。下方卡片对应试卷 (a)(b)(c)。</p>
+    <div class="opts">
+      <a class="opt" href="#a">
+        <strong>OPTION A</strong>
+        <h2>短剧标题批量改写器</h2>
+        <span>≥10 条原标题 → AI 改写「更有点击欲」→ 导出对比 CSV（CLI 或 Web）</span>
+      </a>
+      <a class="opt" href="#b">
+        <strong>OPTION B</strong>
+        <h2>分镜表 → 英文美术 Prompt</h2>
+        <span>表格展示每镜、英文 prompt、一键导出 JSON/CSV</span>
+      </a>
+      <a class="opt" href="#c">
+        <strong>OPTION C</strong>
+        <h2>投放素材合规预检</h2>
+        <span>文案 + 图 URL → 风险标签 + 改写建议报告</span>
+      </a>
+    </div>
+    <footer>
+      <a href="../00-overview/prototype.html">← 资料库总览</a> ·
+      <a href="system-design.md" target="_blank">system-design</a> ·
+      <a href="requirements.md" target="_blank">requirements</a><br />
+      附带：<code>transcript_with_ts.md</code>、<code>key_turning_point.md</code>、<code>rejected_suggestion.md</code>
+    </footer>
+  </div>
+</body>
+</html>

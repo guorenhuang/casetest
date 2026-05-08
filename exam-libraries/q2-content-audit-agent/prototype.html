@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Q2 原型 · 评论审核台</title>
+  <style>
+    :root { --bg:#faf8f5; --card:#fff; --border:#e8e4dc; --pass:#0d7d4d; --review:#b45309; --block:#b91c1c; --text:#1c1917; --muted:#78716c; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+    header { padding: 1rem 1.5rem; background: var(--card); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; }
+    h1 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+    header a { color: #2563eb; text-decoration: none; font-size: 0.85rem; margin-left: 1rem; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 1rem 1.5rem 2rem; display: grid; grid-template-columns: 1fr 300px; gap: 1rem; }
+    @media (max-width: 880px) { .wrap { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
+    .panel h2 { margin: 0 0 .65rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    textarea { width: 100%; min-height: 100px; border-radius: 8px; border: 1px solid var(--border); padding: .6rem; font: inherit; resize: vertical; }
+    button { margin-top: .5rem; padding: .5rem 1rem; border: none; border-radius: 8px; background: #1c1917; color: #fff; font-weight: 600; cursor: pointer; }
+    .row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .35rem; }
+    .tag { font-size: 0.72rem; padding: .2rem .5rem; border-radius: 6px; font-weight: 700; }
+    .tag.pass { background: #d1fae5; color: var(--pass); }
+    .tag.review { background: #ffedd5; color: var(--review); }
+    .tag.block { background: #fee2e2; color: var(--block); }
+    ul.evidence { margin: .35rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--muted); }
+    aside .stat { font-size: 2rem; font-weight: 800; }
+    aside p { margin: .25rem 0; font-size: 0.85rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>评论审核 · 运营台（原型）</h1>
+    <div>
+      <a href="../00-overview/prototype.html">总览</a>
+      <a href="system-design.md" target="_blank">system-design</a>
+      <a href="requirements.md" target="_blank">requirements</a>
+    </div>
+  </header>
+  <div class="wrap">
+    <section class="panel">
+      <h2>单条试运行</h2>
+      <textarea id="t" placeholder="粘贴评论…">加V➕：18-XXXX-XXXX，绝对好看</textarea>
+      <button type="button" id="run">运行规则 + 模型（示意）</button>
+      <div id="out" style="margin-top:1rem;"></div>
+    </section>
+    <aside class="panel">
+      <h2>批次统计（示意）</h2>
+      <p>pass</p>
+      <div class="stat" style="color:var(--pass)">18</div>
+      <p>review</p>
+      <div class="stat" style="color:var(--review)">7</div>
+      <p>block</p>
+      <div class="stat" style="color:var(--block)">5</div>
+      <p style="margin-top:1rem">真实实现输出 <code>run_report.md</code>，含规则 ID 与模型 reason。</p>
+    </aside>
+  </div>
+  <script>
+    document.getElementById('run').onclick = () => {
+      const text = document.getElementById('t').value;
+      let verdict = 'pass', reasons = [];
+      if (/加\s*v|wei\s*xin|\d{3}-\d{4}-\d{4}/i.test(text)) {
+        verdict = 'block';
+        reasons = ['rule:contact_pattern_r1', 'rule:digit_sequence_r4'];
+      } else if (/尼玛|傻/.test(text)) {
+        verdict = 'block';
+        reasons = ['lexicon:profanity_l1'];
+      } else if (/加|私信|戳我/.test(text)) {
+        verdict = 'review';
+        reasons = ['regex:soft_promo_p2', 'model:ambiguous_promo (if available)'];
+      }
+      document.getElementById('out').innerHTML =
+        `<div class="row"><span class="tag ${verdict}">${verdict}</span></div>` +
+        `<ul class="evidence">${reasons.map(r => `<li>${r}</li>`).join('')}</ul>`;
+    };
+  </script>
+</body>
+</html>

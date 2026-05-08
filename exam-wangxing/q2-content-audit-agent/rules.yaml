@@ -1,0 +1,117 @@
+# 外置规则：仅改此文件或通过 Web/API 写入 SQLite；业务代码不参与具体词条维护。
+# 首次启动或由 scripts/import_rules_from_yaml.py 导入数据库。
+
+rules:
+  - id: PROFAN_LEXICON_L1
+    kind: lexicon
+    action: block
+    priority: 5
+    description: 污秽辱骂词表
+    enabled: true
+    config:
+      case_insensitive: true
+      terms:
+        - 傻逼
+        - 尼玛
+        - 脑残
+        - cnmb
+        - 死全家
+        - nmsl
+
+  - id: WECHAT_LEXICON_L2
+    kind: lexicon
+    action: block
+    priority: 6
+    description: 显性引流用语
+    enabled: true
+    config:
+      case_insensitive: true
+      terms:
+        - 加微信
+        - 加我微信
+        - 加我v
+        - 加我V
+        - 私信我发你
+        - 进群领
+
+  - id: CONTACT_REGEX_ADV
+    kind: regex
+    action: block
+    priority: 4
+    description: 广告引流模式（加V、wei xin 等）
+    enabled: true
+    config:
+      flags: IGNORECASE
+      pattern: '(?i)(加\s*[Vv➕＋📩✉️]|jia\s*v|jia\s*wei|wei\s*xin|wx\s*[:：]?|威信|薇信)\b'
+
+  - id: PHONE_QQ_PATTERN
+    kind: digit_sequence
+    action: review
+    priority: 20
+    description: 连续数字达阈值（手机号/QQ/分段号码）
+    enabled: true
+    config:
+      min_digits: 7
+      alternate_regex: '(?:(?:\d{3}[-\s_]\d{4}[-\s_]\d{4})|(?:1[3-9]\d{9}))'
+
+  - id: PINYIN_BYPASS_GAP
+    kind: regex
+    action: review
+    priority: 15
+    description: 拼音/字母拆写绕词（jia v / wei xin / jvx）
+    enabled: true
+    config:
+      flags: IGNORECASE
+      pattern: '((j\s*i\s*a\s*v)|(w\s*e\s*i\s*x\s*i\s*n)|(j\s*v\s*x))'
+    detail_template: '拼音分段/缩写疑似引流: 「{snippet}」'
+
+  - id: INITIAL_LETTERS_TRAP
+    kind: regex
+    action: review
+    priority: 16
+    description: 常见首字母组合 jvx / jwx
+    enabled: true
+    config:
+      flags: IGNORECASE
+      pattern: '(?<![a-zA-Z])(jvx|jwx)\b'
+
+  - id: EMOJI_SUBSTITUTION_TRAP
+    kind: regex
+    action: review
+    priority: 14
+    description: Emoji 混入联系方式暗示
+    enabled: true
+    config:
+      flags: IGNORECASE
+      pattern: '[Vv➕＋📱💬📩].{0,16}(\d|\b戳我\b)'
+
+  - id: SOFT_PROMO_HOOK
+    kind: regex
+    action: review
+    priority: 30
+    description: 软广话术需人工复核
+    enabled: true
+    config:
+      flags: IGNORECASE
+      pattern: '(私信|主页|点个关注|免费送|全集资源|百度云|迅雷|磁力|加我\b)'
+
+  - id: URL_SHORTENER_REVIEW
+    kind: regex
+    action: review
+    priority: 8
+    description: 短链/外链疑似引流（人工瞟一眼）
+    enabled: true
+    config:
+      flags: IGNORECASE
+      pattern: 'https?://[^\s]{6,}'
+
+  - id: OCR_IMAGE_HOST_HINT
+    kind: regex
+    action: review
+    priority: 25
+    description: 命中指定图床域名时 OCR 佐证（详见 ocr_adapter）
+    enabled: true
+    config:
+      flags: IGNORECASE
+      pattern: '(img\.example\.com|cdn\.quiz\.test/img)'
+    apply_when_image: true

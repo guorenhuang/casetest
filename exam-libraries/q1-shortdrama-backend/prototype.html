@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Q1 原型 · 订阅与订单控制台</title>
+  <style>
+    :root { --bg:#0c0e12; --panel:#161b22; --border:#30363d; --accent:#58a6ff; --ok:#3fb950; --warn:#d29922; --text:#e6edf3; --muted:#8b949e; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+    header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    header h1 { font-size: 1rem; font-weight: 600; margin: 0; }
+    header nav a { color: var(--accent); text-decoration: none; margin-right: 1rem; font-size: 0.85rem; }
+    main { display: grid; grid-template-columns: 1fr 320px; gap: 1rem; padding: 1rem; max-width: 1200px; margin: 0 auto; }
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .panel h2 { margin: 0 0 .75rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+    label { display: block; font-size: 0.8rem; color: var(--muted); margin: .5rem 0 .25rem; }
+    select, input, button { width: 100%; padding: .5rem .6rem; border-radius: 6px; border: 1px solid var(--border); background: #0d1117; color: var(--text); }
+    button { background: var(--accent); color: #fff; border: none; cursor: pointer; font-weight: 600; margin-top: .75rem; }
+    button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); margin-top: .5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 500; }
+    .pill { display: inline-block; padding: .12rem .45rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; }
+    .pill.pending { background: rgba(210,153,34,.2); color: var(--warn); }
+    .pill.paid { background: rgba(88,166,255,.15); color: var(--accent); }
+    .pill.active { background: rgba(63,185,80,.15); color: var(--ok); }
+    .mono { font-family: ui-monospace, monospace; font-size: 0.78rem; word-break: break-all; }
+    .sidebar .log { max-height: 280px; overflow: auto; font-family: ui-monospace, monospace; font-size: 0.72rem; color: var(--muted); white-space: pre-wrap; }
+    footer { padding: 0 1rem 1.5rem; max-width: 1200px; margin: 0 auto; color: var(--muted); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>短剧后台 · 会员订阅（原型）</h1>
+    <nav>
+      <a href="../00-overview/prototype.html">← 资料库总览</a>
+      <a href="system-design.md" target="_blank" rel="noopener">system-design</a>
+      <a href="requirements.md" target="_blank" rel="noopener">requirements</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>新建订阅订单（示意）</h2>
+      <label for="plan">套餐</label>
+      <select id="plan">
+        <option>月度 VIP · ¥18</option>
+        <option>季度 VIP · ¥48</option>
+        <option>年度 VIP · ¥168</option>
+      </select>
+      <label for="user">用户 ID</label>
+      <input id="user" value="user_demo_001" />
+      <button type="button" id="btnOrder">创建订单</button>
+      <button type="button" class="secondary" id="btnStripe">模拟 Stripe Webhook 成功</button>
+      <button type="button" class="secondary" id="btnApple">模拟 Apple IAP 成功</button>
+      <h2 style="margin-top:1.25rem">订单 / 订阅</h2>
+      <table>
+        <thead><tr><th>订单号</th><th>状态</th><th>渠道</th><th>订阅至</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+    <aside class="panel sidebar">
+      <h2>Webhook 与幂等（示意日志）</h2>
+      <div class="log" id="log"></div>
+    </aside>
+  </main>
+  <footer>
+    本页为静态原型，展示控制台信息架构；真实实现以 API + DB + scripts 为准。状态机见 <code>state-machine.md</code>。
+  </footer>
+  <script>
+    const state = [
+      { id: 'ord_7a2f', status: 'pending', channel: '—', subUntil: '—' },
+    ];
+    function render() {
+      const tb = document.getElementById('rows');
+      tb.innerHTML = state.map(r => `<tr><td class="mono">${r.id}</td><td><span class="pill ${r.status}">${r.status}</span></td><td>${r.channel}</td><td>${r.subUntil}</td></tr>`).join('');
+    }
+    function log(msg) {
+      const el = document.getElementById('log');
+      el.textContent = `[${new Date().toLocaleTimeString()}] ${msg}\n` + el.textContent;
+    }
+    document.getElementById('btnOrder').onclick = () => {
+      const id = 'ord_' + Math.random().toString(36).slice(2, 8);
+      state.unshift({ id, status: 'pending', channel: '—', subUntil: '—' });
+      log(`POST /orders plan=selected → ${id} pending`);
+      render();
+    };
+    document.getElementById('btnStripe').onclick = () => {
+      const o = state[0];
+      if (!o || o.status !== 'pending') { log('SKIP: no pending order'); return; }
+      log('POST /webhooks/stripe sig=HMAC_OK idempotency=evt_xxx');
+      o.status = 'active'; o.channel = 'stripe'; o.subUntil = '2026-06-08';
+      log('replay same evt → 200 noop (idempotent)');
+      render();
+    };
+    document.getElementById('btnApple').onclick = () => {
+      const o = state[0];
+      if (!o || o.status !== 'pending') { log('SKIP: no pending order'); return; }
+      log('POST /webhooks/apple signedTransactionInfo=...');
+      o.status = 'active'; o.channel = 'apple'; o.subUntil = '2026-06-08';
+      render();
+    };
+    render();
+    log('Ready — 仅 UI 示意');
+  </script>
+</body>
+</html>

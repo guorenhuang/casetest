@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>笔试资料库 · 总览</title>
+  <style>
+    :root { --bg:#0f1419; --card:#1a2332; --accent:#3d8bfd; --text:#e7ecf3; --muted:#8b9bb4; }
+    * { box-sizing: border-box; }
+    body { font-family: ui-sans-serif, system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem; line-height: 1.55; }
+    h1 { font-size: 1.35rem; font-weight: 600; margin: 0 0 0.5rem; }
+    p.lead { color: var(--muted); margin: 0 0 1.5rem; font-size: 0.95rem; }
+    .grid { display: grid; gap: 1rem; max-width: 720px; }
+    a.card {
+      display: block; background: var(--card); border-radius: 10px; padding: 1rem 1.15rem;
+      text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,.06);
+      transition: border-color .15s, transform .1s;
+    }
+    a.card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    a.card strong { color: var(--accent); font-size: 0.8rem; letter-spacing: .04em; }
+    a.card h2 { margin: .35rem 0 .25rem; font-size: 1.05rem; font-weight: 600; }
+    a.card span { color: var(--muted); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>AI 平台工程师笔试 · 资料库导航</h1>
+  <p class="lead">每题独立目录：<code>system-design.md</code>、<code>requirements.md</code>、<code>prototype.html</code></p>
+  <nav class="grid" aria-label="题目导航">
+    <a class="card" href="../q1-shortdrama-backend/prototype.html"><strong>Q1 · 30 分</strong><h2>短剧会员订阅后台</h2><span>订单、多渠道回调、状态机、幂等</span></a>
+    <a class="card" href="../q2-content-audit-agent/prototype.html"><strong>Q2 · 25 分</strong><h2>评论审核 Agent</h2><span>规则可配置、证据链、降级</span></a>
+    <a class="card" href="../q3-prompt-rescue/prototype.html"><strong>Q3 · 25 分</strong><h2>分镜 Prompt 救火</h2><span>观测 → 证据 → 映射修复</span></a>
+    <a class="card" href="../q4-vibe-coding/prototype.html"><strong>Q4 · 20 分</strong><h2>Vibe Coding 小工具</h2><span>三选一选题 + 可运行 demo</span></a>
+  </nav>
+</body>
+</html>

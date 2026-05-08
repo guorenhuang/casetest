@@ -1,0 +1,27 @@
+services:
+  q2-audit:
+    build: .
+    image: q2-content-audit-agent:local
+    ports:
+      - "8080:8000"
+    volumes:
+      - q2_audit_data:/app/data
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  q2_audit_data:
