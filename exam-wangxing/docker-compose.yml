@@ -40,7 +40,7 @@ services:
       context: ./q2-content-audit-agent
     image: exam-wangxing-q2:local
     ports:
-      - "8080:8000"
+      - "8009:8000"
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}

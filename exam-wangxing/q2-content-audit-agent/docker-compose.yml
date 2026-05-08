@@ -3,7 +3,7 @@ services:
     build: .
     image: q2-content-audit-agent:local
     ports:
-      - "8080:8000"
+      - "8009:8000"
     volumes:
       - q2_audit_data:/app/data
     environment:

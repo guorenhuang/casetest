@@ -25,7 +25,7 @@
 docker compose up --build
 ```
 
-- **前端 + 后端**：镜像内会先 `npm run build` Ant Design SPA，再由 FastAPI 挂载 `frontend/dist`；浏览器访问 **`http://localhost:8080`**。
+- **前端 + 后端**：镜像内会先 `npm run build` Ant Design SPA，再由 FastAPI 挂载 `frontend/dist`；浏览器访问 **`http://localhost:8009`**（`docker-compose` 映射 `8009:8000`）。
 - **`/api`**：与静态页同源，无需再配 Vite 代理。
 - **SQLite**：`data/audit.db` 落在命名卷 `q2_audit_data`，重启规则与审核记录可保留；首次空库会从镜像内的 `rules.yaml` 播种。
 - **可选模型**：按需设置环境变量：`OPENAI_API_KEY`、`OPENAI_BASE_URL`、`OPENAI_MODEL`。

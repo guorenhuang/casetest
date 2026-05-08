@@ -114,7 +114,7 @@ cd /Users/mac/Desktop/casetest/q2-content-audit-agent
 docker compose up --build
 ```
 
-- 浏览器：**http://localhost:8080**（映射容器内 `8000`）。
+- 浏览器：**http://localhost:8009**（映射容器内 `8000`）。
 - **`data/audit.db`** 使用卷 **`q2_audit_data`** 持久化。
 - 可选环境变量：`OPENAI_API_KEY`、`OPENAI_BASE_URL`、`OPENAI_MODEL`（Compose 已从主机传入）。
 
@@ -253,7 +253,7 @@ Q3 仍使用 **`exam-wangxing/q3-prompt-rescue/docker-compose.yml`** 单独起�
 |--------|-------------------------------|-------------------------------------|
 | **工作目录** | 在**仓库根** `casetest/` 执行 | 在 **`exam-wangxing/`** 里执行（打成 zip 解压后也能直接用） |
 | **`build.context`** | `./exam-wangxing/q1-…` 等 | `./q1-…` 等同路径，只是相对根不同 |
-| **服务 / 端口 / 环境变量** | Q1 8001、Q3 8765、Q2 8080、Q4 **8004**，四题一致 | 相同 |
+| **服务 / 端口 / 环境变量** | Q1 8001、Q3 8765、Q2 8009、Q4 **8004**，四题一致 | 相同 |
 | **镜像名** | `casetest-*:local` | `exam-wangxing-*:local` |
 | **数据卷** | 显式 `name: casetest_*` | 未写 `name`，由项目名自动生成（和根目录跑起来**不是同一份卷**，但各自自洽） |
 
@@ -295,7 +295,7 @@ cd exam-wangxing
 docker compose up --build
 ```
 
-端口不变：**Q1 → 8001，Q3 → 8765，Q2 → 8080，Q4 → 8004**。
+端口不变：**Q1 → 8001，Q3 → 8765，Q2 → 8009，Q4 → 8004**。
 
 ### 已改的引用
 - `exam-wangxing/README.md`：去掉「上一级 casetest/docker-compose」说明  
@@ -351,7 +351,7 @@ docker compose up --build
 已在仓库最外层 **`/Users/mac/Desktop/casetest/QUICK_START.md`** 中加入快速入口，主要内容：
 
 - **`cd exam-wangxing` + `docker compose up --build`**  
-- **四题端口表**（8001 / 8765 / 8080 / 8004）  
+- **四题端口表**（8001 / 8765 / 8009 / 8004）  
 - 不用 Docker 时各题 **`README`** 的阅读顺序  
 - 链到 **`exam-paper.md`**、**`exam-wangxing/README.md`**、**`reflection`**、**`TRANSCRIPT`**、**`chat.html`**、**`.gitignore`**
 

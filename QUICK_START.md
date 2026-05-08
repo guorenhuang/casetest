@@ -1,9 +1,5 @@
 # QUICK START · casetest
 
-**GitHub**：https://github.com/guorenhuang/casetest
-
-部署为静态站时，默认打开根目录 **[`index.html`](index.html)** 即可浏览官网式总览（题面精要、四题工程、文档地图与 Docker 端口表）。
-
 本仓库为笔试工程：**题面**在根目录 [`exam-paper.md`](exam-paper.md)，**可提交代码与四题说明**在 **[`exam-wangxing/`](exam-wangxing/README.md)**。
 
 ---
@@ -18,8 +14,8 @@ docker compose up --build
 | 服务 | 地址 |
 |------|------|
 | Q1 短剧后端 + 控制台 | http://127.0.0.1:8001 |
-| Q2 评论审核 | http://127.0.0.1:8009 |
 | Q3 Prompt 救火工作台 | http://127.0.0.1:8765 |
+| Q2 评论审核 | http://127.0.0.1:8009 |
 | Q4 分镜 → 英文 Prompt | http://127.0.0.1:8004 |
 
 可选：`export OPENAI_API_KEY=...`（Q2/Q3/Q4 用模型时）。
@@ -41,12 +37,9 @@ docker compose up --build
 
 | 文件 | 说明 |
 |------|------|
-| [GitHub 仓库](https://github.com/guorenhuang/casetest) | 公开源码与提交物 |
-| [`index.html`](index.html) | 静态部署首页：题面介绍、四题平台、文档入口 |
 | [`exam-wangxing/README.md`](exam-wangxing/README.md) | 提交目录总览、自检、Compose 说明 |
 | [`exam-wangxing/reflection.md`](exam-wangxing/reflection.md) | 试卷 Reflection（≤600 字） |
-| [`exam-wangxing/TRANSCRIPT.md`](exam-wangxing/TRANSCRIPT.md) | 全卷 transcript 说明（公共部分 vs 各题） |
-| [`exam-wangxing/agent0_transcript.md`](exam-wangxing/agent0_transcript.md) | 公共部分 AI 协同（资料库 / 站点等，非单题） |
+| [`exam-wangxing/TRANSCRIPT.md`](exam-wangxing/TRANSCRIPT.md) | 全卷 transcript 索引 |
 | [`chat.html`](chat.html) | 工作区会话 HTML 归档 |
 
 ---

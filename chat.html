@@ -105,7 +105,7 @@
       <div class="role">Assistant</div>
       <pre>已在 casetest/q2-content-audit-agent/ 添加标准文件名 docker-compose.yml（及多阶段 Dockerfile、.dockerignore）。
 
-用法：cd q2-content-audit-agent &amp;&amp; docker compose up --build → 监听 8080:8000，SQLite 挂载卷 q2_audit_data；同源提供 Ant Design 静态页与 /api。
+用法：cd q2-content-audit-agent &amp;&amp; docker compose up --build → 监听 8009:8000，SQLite 挂载卷 q2_audit_data；同源提供 Ant Design 静态页与 /api。
 
 README 「Docker Compose」小节已同步说明。</pre>
     </article>
@@ -215,6 +215,18 @@ README 「Docker Compose」小节已同步说明。</pre>
       <time datetime="2026-05-08">2026-05-08</time>
       <div class="role">Assistant</div>
       <pre>已删除 exam-wangxing/q3-prompt-rescue/README.md 内的「排错」整节；chat.html 中此前与该问题相关的条目也已移除。</pre>
+    </article>
+
+    <article class="user">
+      <time datetime="2026-05-08">2026-05-08</time>
+      <div class="role">User</div>
+      <pre>q2 的端口改成8009 不要8080</pre>
+    </article>
+
+    <article class="assistant">
+      <time datetime="2026-05-08">2026-05-08</time>
+      <div class="role">Assistant</div>
+      <pre>Q2 Compose 宿主端口已由 8080 改为 **8009**（仍映射容器内 8000）：`exam-wangxing/docker-compose.yml`、`q2-content-audit-agent/docker-compose.yml`；并已同步 README、QUICK_START、根 README、index.html、chat 与 q2/q4 transcript 中的端口描述。</pre>
     </article>
 
   </main>

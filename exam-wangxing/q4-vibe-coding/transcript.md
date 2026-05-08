@@ -165,7 +165,7 @@ docker-compose.yml 写一下
 | 服务 | 映射 | 说明 |
 |------|------|------|
 | `q1-shortdrama-backend` | **8001 → 8000** | 沿用现有 `q1-shortdrama-backend/Dockerfile` |
-| `q2-content-audit-agent` | **8080 → 8000** | 沿用现有 `q2-content-audit-agent/Dockerfile` |
+| `q2-content-audit-agent` | **8009 → 8000** | 沿用现有 `q2-content-audit-agent/Dockerfile` |
 | `q4-vibe-coding` | **8004 → 8000** | **新建** `exam-libraries/q4-vibe-coding/code/Dockerfile`（前端 `npm ci` + build，再拷到 Python 镜像） |
 
 **用法**（在 `casetest` 根目录）：
